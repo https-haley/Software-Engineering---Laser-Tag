@@ -24,15 +24,3 @@ def insert_player(conn, player_id, codename):
         cur.execute("INSERT INTO players (id, codename) VALUES (%s, %s)", (player_id, codename))
     
     conn.commit()
-
-if __name__ == "__main__":
-    conn = get_connection()
-
-    codename = get_codename(conn, 1)
-    if codename:
-        print(f"Player ID 1 is: {codename}")
-    else:
-        insert_player(conn, 1, "Bob")
-        print(f"Added Bob as player ID 1")
-
-    conn = conn.close()
