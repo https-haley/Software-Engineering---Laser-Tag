@@ -1,28 +1,24 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
-import socket
+from tkinter import ttk
 
-class PlayerEntry: 
+class PlayerEntry:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("Player Entry")
-        self.root.geometry("520x360")
-        self.root.resizable(True, True)
+        self.root.title("Laser Tag Entry Terminal")
+        self.root.geometry("900x500")
         self.root.configure(bg="black")
-            #Main Frame
-        main_frame = tk.Frame(self.root)
-        main_frame.pack()
 
-    #Title
         title = tk.Label(
             self.root,
             text="Edit Current Game",
             font=("Arial", 18, "bold"),
-            fg="blue",
-            bg = "black"
+            fg="deepskyblue",
+            bg="black"
         )
-        title.pack(pady=3)
+        title.pack(pady=15)
 
+        main_frame = tk.Frame(self.root, bg="black")
+        main_frame.pack()
 
         self.create_red_team_table(main_frame)
         self.create_green_team_table(main_frame)
@@ -31,22 +27,59 @@ class PlayerEntry:
         red_frame = tk.LabelFrame(
             parent,
             text="RED TEAM",
-            bg="black",
+            bg="darkred",
             fg="white",
-            font=("Arial", 12 ),
+            font=("Arial", 12, "bold"),
             padx=10,
             pady=10
         )
         red_frame.grid(row=0, column=0, padx=20)
 
+        
+        self.red_table = ttk.Treeview(
+            red_frame,
+            columns=("PlayerNumber", "UserName"),
+            show="headings",
+            height=20
+        )
+
+        self.red_table.column("PlayerNumber", width=40, anchor="center")
+        self.red_table.column("UserName", width=140, anchor="center")
+
         self.red_table.pack()
 
         for i in range(20):
-            self.red_table.insert("", "end", value=(i, "", ""))
+            self.red_table.insert("", "end", values=(i, "", ""))
 
-    def team_ui(self):
-        self.tree = ttk.Treeview(self, columns)
+    def create_green_team_table(self, parent):
+        green_frame = tk.LabelFrame(
+            parent,
+            text="GREEN TEAM",
+            bg="darkgreen",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            padx=10,
+            pady=10
+        )
+        green_frame.grid(row=0, column=1, padx=20)
 
+        self.green_table = ttk.Treeview(
+            green_frame,
+            columns=("PlayerNumber", "UserName"),
+            show="headings",
+            height=20
+        )
+
+        self.green_table.column("PlayerNumber", width=40, anchor="center")
+        self.green_table.column("UserName", width=140, anchor="center")
+
+        self.green_table.pack()
+
+        for i in range(20):
+            self.green_table.insert("", "end", values=(i, "", ""))
+
+
+    
     def run(self):
         self.root.mainloop()
 
