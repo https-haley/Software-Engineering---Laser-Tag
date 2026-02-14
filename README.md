@@ -2,10 +2,14 @@
 How to Run:
 
 
-GIT-Hub names:
-https.haley - Haley Trejo
-tjtorin - Torin Eschberger
-timothypham045 - Timothy Pham
-lexigrozev - Lexi Grozev
+| Name     | GIT-Hub Username |
+|----------|----------|
+| Lexi Grozev    | lexigrozev     |
+| Torin Eschberger    | tjtorin     |
+| Timothy Pham    | timothypham045     |
+| Haley Trejo    | https.haley     |
+
+
 
 Script:
+
