@@ -5,14 +5,17 @@ from tkinter import messagebox
 import udp
 import db
 
+# Main class responsible for player entry screen and roster management
 class PlayerEntry:
     def __init__(self, root):
         self.root = root
         self.root.title("Entry Terminal")
         self.root.geometry("1080x720")
         self.root.configure(bg="black")
+        # Tracks which team is currently active for insertion
         self.active_team = "RED"  
 
+        # Title label at top of window
         title = tk.Label(
             self.root,
             text="Edit Current Game",
@@ -22,34 +25,56 @@ class PlayerEntry:
         )
         title.pack(pady=15)
 
+        # Frame that holds both team tables
         main_frame = tk.Frame(self.root, bg="black")
         main_frame.pack()
+
+        # Create both team tables
         self.create_red_team_table(main_frame)
         self.create_green_team_table(main_frame)
+
+        # Clicking a table sets that team as active
         self.red_table.bind("<Button-1>", lambda e: self.set_active_team("RED"), add="+")
         self.green_table.bind("<Button-1>", lambda e: self.set_active_team("GREEN"), add="+")
+        
+        # Create bottom button bar
         self.create_bottom_bar()
+
+        # Bind keyboard shortcuts
         self.bind_function_keys()
+
+        # Connect to PostgreSQL database
         self.conn = db.get_connection()
+
+        # Ensure DB connection closes when window exits
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+        # Start UDP sockets
         udp.startUDP()
 
+    
+    # Close database connection on exit
     def on_close(self):
         self.conn.close()
         self.root.destroy()
-        
+
+    # Set currently selected team
     def set_active_team(self, team):
         self.active_team = team
+        # Clear selection from both tables
         self.red_table.selection_remove(self.red_table.selection())
         self.green_table.selection_remove(self.green_table.selection())
         
+    # Finds first empty slot in table   
     def get_next_empty_row(self, table):
         for row in table.get_children():
             slot, equip, name = table.item(row, "values")
+            # Empty slot = no equipment and no name
             if str(equip) == "" and str(name) == "":
                 return row, slot
         return None, None
 
+    # Creates red team table
     def create_red_team_table(self, parent):
         self.red_frame = tk.LabelFrame(
             parent,
@@ -62,7 +87,7 @@ class PlayerEntry:
         )
         self.red_frame.grid(row=0, column=0, padx=20)
 
-        
+        # Table widget
         self.red_table = ttk.Treeview(
             self.red_frame,
             columns=("Slot", "EquipmentID", "UserName"),
@@ -71,10 +96,12 @@ class PlayerEntry:
             selectmode="browse"
         )
 
+        # Column formatting
         self.red_table.column("Slot", width=40, anchor="center")
         self.red_table.column("EquipmentID", width=100, anchor="center")
         self.red_table.column("UserName", width=140, anchor="center")
 
+        # Column headers
         self.red_table.heading("Slot", text="#")
         self.red_table.heading("EquipmentID", text="Equip ID")
         self.red_table.heading("UserName", text="Codename")
@@ -84,6 +111,7 @@ class PlayerEntry:
         for i in range(20):
             self.red_table.insert("", "end", values=(i, "", ""))
 
+    # Creates green team table
     def create_green_team_table(self, parent):
         self.green_frame = tk.LabelFrame(
             parent,
@@ -117,7 +145,7 @@ class PlayerEntry:
         for i in range(20):
             self.green_table.insert("", "end", values=(i, "", ""))
 
-    # Bottom Bar
+    # Bottom control button bar
     def create_bottom_bar(self):
         bar = tk.Frame(self.root, bg="black")
         bar.pack(side="bottom", fill="x")
@@ -125,6 +153,7 @@ class PlayerEntry:
         btn_row = tk.Frame(bar, bg="black")
         btn_row.pack(fill="x", padx=10, pady=(8, 4))
 
+        # Helper function to build styled buttons
         def make_btn(text, command):
             return tk.Button(
                 btn_row,
@@ -141,7 +170,7 @@ class PlayerEntry:
                 pady=10
             )
 
-    #Buttons
+        # Function buttons
         make_btn("F1\nEdit\nGame", self.f1_edit_game).pack(side="left", padx=10)
         make_btn("F2\nGame\nParameters", self.f2_game_params).pack(side="left", padx=10)
         make_btn("F3\nStart\nGame", self.f3_start_game).pack(side="left", padx=10)
@@ -151,6 +180,7 @@ class PlayerEntry:
         make_btn("F10\nFlick\nSync", self.f10_flick_sync).pack(side="left", padx=40)
         make_btn("F12\nClear\nGame", self.f12_clear_game).pack(side="left", padx=10)
 
+        # Instruction hint label
         hint = tk.Label(
             bar,
             text="<Del> to Delete Player, <Ins> to Manually Insert, or edit codename",
@@ -161,7 +191,7 @@ class PlayerEntry:
         hint.pack(fill="x")
 
 
-    #Keybinds
+    # Keyboard shortcuts
     def bind_function_keys(self):
         self.root.bind("<F1>",  lambda e: self.f1_edit_game())
         self.root.bind("<F2>",  lambda e: self.f2_game_params())
@@ -175,8 +205,9 @@ class PlayerEntry:
         self.root.bind("<Delete>", lambda e: self.delete_selected_player())
         self.root.bind("<Insert>", lambda e: self.manual_insert_player())
 
-    #Button Functions
+    # Button callbacks
     def f1_edit_game(self):      print("F1 Edit Game")
+    # Opens window allowing network address change
     def f2_game_params(self):    
         print("F2 Game Parameters")
         win = tk.Toplevel(self.root)
@@ -209,6 +240,7 @@ class PlayerEntry:
     def f7_unused(self):         print("F7 pressed")
     def f8_view_game(self):      print("F8 View Game")
     def f10_flick_sync(self):    print("F10 Flick Sync")
+    # Clears all players from both teams
     def f12_clear_game(self):    
         print("F12 Clear Game")
 
@@ -216,7 +248,8 @@ class PlayerEntry:
             for item_id in table.get_children():
                 slot, _equip, _name = table.item(item_id, "values")
                 table.item(item_id, values=(slot, "", ""))
-
+                
+    # Deletes selected player from table
     def delete_selected_player(self):
         print("Delete selected player")
 
@@ -231,18 +264,21 @@ class PlayerEntry:
             item_id = selected[0]
             slot, _equip, _name = table.item(item_id, "values")
             table.item(item_id, values=(slot, "", ""))
-
+            
+    # Opens popup to manually add player
     def manual_insert_player(self):
            
         table = self.red_table if self.active_team == "RED" else self.green_table
         team = self.active_team
 
         item_id, slot = self.get_next_empty_row(table)
+
+        # Stop if team is full
         if item_id is None:
             messagebox.showerror("Team Full", f"{team} team already has 20 players.")
             return
 
-        # Popup for Player ID
+        # Create popup window
         win = tk.Toplevel(self.root)
         win.title("Add Player")
         win.configure(bg="black")
@@ -251,21 +287,25 @@ class PlayerEntry:
         tk.Label(win, text=f"{team} TEAM - Slot {slot}", fg="deepskyblue",
                  bg="black", font=("Arial", 12, "bold")).pack(pady=10)
 
+        # Player ID entry
         tk.Label(win, text="Player ID:", fg="white", bg="black").pack()
         id_entry = tk.Entry(win)
         id_entry.pack(pady=5)
         id_entry.focus_set()
 
+        # Codename entry
         tk.Label(win, text="Codename (only needed with new player IDs):", fg="white", bg="black").pack()
         name_entry = tk.Entry(win)
         name_entry.pack(pady=5)
 
+        # Equipment ID entry
         tk.Label(win, text="Equipment ID:", fg="white", bg="black").pack()
         equip_entry = tk.Entry(win)
         equip_entry.pack(pady=5)
 
+        # Save button logic
         def save():
-
+            # Validate Player ID
             pid_text = id_entry.get().strip()
             if not pid_text.isdigit():
                 messagebox.showerror("Invalid", "Player ID must be an integer.")
@@ -275,6 +315,7 @@ class PlayerEntry:
 
             player_id = int(pid_text)
 
+            # Validate Equipment ID
             equip_text = equip_entry.get().strip()
             if not equip_text.isdigit():
                 messagebox.showerror("Invalid", "Equipment ID must be an integer.")
@@ -282,7 +323,8 @@ class PlayerEntry:
                 win.focus_force()
                 return
             equipment_id = int(equip_text)
-            
+
+            # Check duplicate equipment ID
             for table_check in (self.red_table, self.green_table):
                 for row in table_check.get_children():
                     vals = table_check.item(row, "values")
@@ -292,7 +334,8 @@ class PlayerEntry:
                         win.lift()
                         win.focus_force()
                         return
-                        
+
+            # Check duplicate player ID already in roster
             for table_check in (self.red_table, self.green_table):
                 for row in table_check.get_children():
                     slot_val, equip_val, name_val = table_check.item(row, "values")
@@ -308,40 +351,40 @@ class PlayerEntry:
                         win.focus_force()
                         return
 
-            # Query DB for existing codename
+            # Check database for existing codename
             existing_name = db.get_codename(self.conn, player_id)
 
             typed_name = name_entry.get().strip()
 
             if existing_name:
-                # If player exists, allow updating codename if a new one was entered
+                # Update name if user entered a new one
                 if typed_name != "" and typed_name != existing_name:
                     db.update_codename(self.conn, player_id, typed_name)
                     codename = typed_name
                 else:
                     codename = existing_name
             else:
-                # New player: must provide codename, then insert
+                # New player must supply codename
                 codename = typed_name
                 if codename == "":
                     messagebox.showerror("Invalid", "New player requires a codename.")
                     return
                 db.insert_player(self.conn, player_id, codename)
 
-            # Update GUI table with codename
+            # Add player to table
             table.item(item_id, values=(slot, equipment_id, codename))
+
+            # Broadcast equipment ID over UDP
             udp.broadcastEquipmentID(equipment_id)
             win.destroy()
 
+        # Save button
         tk.Button(win, text="Save", command=save, bg="black", fg="lime",
                   bd=2, relief="solid", padx=16, pady=6).pack(pady=10)
 
         win.bind("<Return>", lambda e: save())
-    
+
+    # Start Tkinter event loop
     def run(self):
         self.root.mainloop()
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    PlayerEntry(root)
-    root.mainloop()
