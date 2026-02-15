@@ -3,7 +3,7 @@ from PIL import Image, ImageTk #pip install Pillow
 from playerentry import PlayerEntry
 
 SPLASH_MS = 3000 # 3 seconds
-WINDOWN_SIZE_X = 400 
+WINDOW_SIZE_X = 400 
 WINDOW_SIZE_Y = 300
 
 class SplashScreen(tk.Toplevel):
@@ -62,4 +62,5 @@ class App(tk.Tk):
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
 
