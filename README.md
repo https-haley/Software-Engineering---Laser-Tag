@@ -72,6 +72,10 @@ chmod +x install.sh
 
 ./install.sh
 
+## Running the program
+
+Once all required dependencies are downloaded with the script, run the program using python3 main.py
+
 ## **Notes:**
 
 The database schema must not be modified.
@@ -85,6 +89,7 @@ Maximum players per team is 20 for this sprint implementation.
 Application tested on Debian VM environment.
 
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
+
 
 
 
