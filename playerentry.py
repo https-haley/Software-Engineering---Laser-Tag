@@ -254,7 +254,7 @@ class PlayerEntry:
         id_entry.pack(pady=5)
         id_entry.focus_set()
 
-        tk.Label(win, text="Codename (only needed if new):", fg="white", bg="black").pack()
+        tk.Label(win, text="Codename (only needed with new player IDs):", fg="white", bg="black").pack()
         name_entry = tk.Entry(win)
         name_entry.pack(pady=5)
 
@@ -309,14 +309,21 @@ class PlayerEntry:
             # Query DB for existing codename
             existing_name = db.get_codename(self.conn, player_id)
 
+            typed_name = name_entry.get().strip()
+
             if existing_name:
-                codename = existing_name
+                # If player exists, allow updating codename if a new one was entered
+                if typed_name != "" and typed_name != existing_name:
+                    db.update_codename(self.conn, player_id, typed_name)
+                    codename = typed_name
+                else:
+                    codename = existing_name
             else:
-                codename = name_entry.get().strip()
+                # New player: must provide codename, then insert
+                codename = typed_name
                 if codename == "":
                     messagebox.showerror("Invalid", "New player requires a codename.")
                     return
-                # Insert into DB if not found
                 db.insert_player(self.conn, player_id, codename)
 
             # Update GUI table with codename
