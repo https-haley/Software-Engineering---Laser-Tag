@@ -95,7 +95,14 @@ chmod +x install.sh
 ```
 ## Running the program
 
-Once all required dependencies are downloaded with the script, run the program using:
+Once all required dependencies are downloaded with the script, activate the virtual environment:
+
+```
+source venv/bin/activate
+```
+
+Run the program using:
+
 ```
 python3 main.py
 ```
