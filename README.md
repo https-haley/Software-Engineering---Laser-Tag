@@ -23,7 +23,7 @@ The following must be installed on the system:
 
 All dependencies will be installed automatically using the install script.
 
-## **Getting the Code**
+## **Getting the Code:**
 
 To download the project onto your local machine or virtual machine, clone the repository using Git:
 
@@ -37,7 +37,7 @@ sudo apt update
 
 sudo apt install -y git
 
-## **Other Installation Instructions**
+## **Other Installation Instructions:**
 
 Run the install script:
 
@@ -58,6 +58,7 @@ Maximum players per team is 20 for this sprint implementation.
 Application tested on Debian VM environment.
 
 Script:
+
 
 
 
