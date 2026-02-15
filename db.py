@@ -22,5 +22,10 @@ def get_codename(conn, player_id):
 def insert_player(conn, player_id, codename):
     with conn.cursor() as cur:
         cur.execute("INSERT INTO players (id, codename) VALUES (%s, %s)", (player_id, codename))
-    
-    conn.commit()
+        conn.commit()
+        
+def get_player_id(conn, codename):
+    with conn.cursor() as cur:
+        cur.execute("SELECT id FROM players WHERE codename = %s", (codename,))
+        row = cur.fetchone()
+        return row[0] if row else None
