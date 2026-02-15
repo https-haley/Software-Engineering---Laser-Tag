@@ -1,10 +1,15 @@
 import tkinter as tk
 from PIL import Image, ImageTk #pip install Pillow
 from playerentry import PlayerEntry
+from pathlib import Path
 
 SPLASH_MS = 3000 # 3 seconds
 WINDOW_SIZE_X = 400 
 WINDOW_SIZE_Y = 300
+
+# Get directory where script is located
+script_dir = Path(__file__).parent.absolute()
+logo_path = script_dir / "logo.jpg"
 
 class SplashScreen(tk.Toplevel):
         def __init__(self, parent, image_path: str, duration_ms: int, on_close):
@@ -51,7 +56,7 @@ class App(tk.Tk):
         # show splash screen, then player entry
         SplashScreen(
             parent = self,
-            image_path = "logo.jpg",
+            image_path = logo_path,
             duration_ms = SPLASH_MS,
             on_close = self.show_player_entry
         )
