@@ -10,14 +10,14 @@
 ## **Requirements:**
 
 The provided Debian virtual machine already includes:
-
-- Python 3
   
 - PostgreSQL
 
 The install script will automatically install all remaining dependencies such as:
 
 - Tkinter
+
+- Python 3
 
 - pip
 
@@ -38,7 +38,7 @@ sudo apt update
 sudo apt install -y git
 ```
 
-### To download the project onto your local machine or virtual machine, clone the repository using Git:
+### To download the project onto your virtual machine, clone the repository using Git:
 
 Run these commands in the VM terminal.
 
@@ -107,13 +107,14 @@ All players must have integer player IDs.
 
 Equipment IDs must be unique.
 
-Maximum players per team is 20 for this sprint implementation.
+Maximum players per team is 20 for this implementation.
 
 Application tested on Debian VM environment.
 
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
