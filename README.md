@@ -84,6 +84,9 @@ Maximum players per team is 20 for this sprint implementation.
 
 Application tested on Debian VM environment.
 
+If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
+
+
 
 
 
