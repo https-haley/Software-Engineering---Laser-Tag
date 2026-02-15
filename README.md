@@ -37,6 +37,31 @@ sudo apt update
 
 sudo apt install -y git
 
+## Downloading the Project Without Git:
+
+If you do not have Git installed, you can download the project as a ZIP file instead.
+
+Steps:
+
+Open the repository page in your web browser
+(example: https://github.com/https-haley/Software-Engineering---Laser-Tag)
+
+Click the green Code button near the top of the page.
+
+Click Download ZIP.
+
+Save the file to your computer.
+
+Extract the ZIP file:
+
+unzip Software-Engineering---Laser-Tag.zip
+
+cd Software-Engineering---Laser-Tag
+
+If unzip is not installed, install it:
+
+sudo apt install -y unzip
+
 ## **Other Installation Instructions:**
 
 Run the install script:
@@ -58,6 +83,7 @@ Maximum players per team is 20 for this sprint implementation.
 Application tested on Debian VM environment.
 
 Script:
+
 
 
 
