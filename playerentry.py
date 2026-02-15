@@ -234,8 +234,8 @@ class PlayerEntry:
                     # get player id from codename
                     player_id = db.get_player_id(self.conn, name)
 
-                    if player_id is not None:
-                        db.delete_player(self.conn, player_id)
+                if player_id is not None:
+                    db.delete_player(self.conn, player_id)
 
                 # clear row in GUI
                 table.item(item_id, values=(slot, "", ""))
