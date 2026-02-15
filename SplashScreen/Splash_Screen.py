@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk #pip install Pillow
+from playerentry import PlayerEntry
 
 SPLASH_MS = 3000 # 3 seconds
 WINDOWN_SIZE_X = 400 
@@ -45,7 +46,7 @@ class App(tk.Tk):
         self.withdraw()
         #window
         self.title("Photon Laser Tag")
-        self.geometry(f"{WINDOWN_SIZE_X}x{WINDOW_SIZE_Y}") # player entry form size
+        self.geometry(f"{WINDOW_SIZE_X}x{WINDOW_SIZE_Y}") # player entry form size
 
         # show splash screen, then player entry
         SplashScreen(
@@ -56,8 +57,9 @@ class App(tk.Tk):
         )
     def show_player_entry(self):
          self.deiconify() # show main window
-         print("Splash screen closed. Show player entry form here.")
+         PlayerEntry(self)
 
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
