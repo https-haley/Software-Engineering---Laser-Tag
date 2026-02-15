@@ -219,6 +219,7 @@ class PlayerEntry:
 
     def delete_selected_player(self):
         print("Delete selected player")
+
         selected = self.red_table.selection()
         table = self.red_table
         if not selected:
@@ -227,8 +228,17 @@ class PlayerEntry:
 
         if selected:
             item_id = selected[0]
-            slot, _equip, _name = table.item(item_id, "values")
-            table.item(item_id, values=(slot, "", ""))
+            slot, equip, name = table.item(item_id, "values")
+
+                if name != "":
+                    # get player id from codename
+                    player_id = db.get_player_id(self.conn, name)
+
+                    if player_id is not None:
+                        db.delete_player(self.conn, player_id)
+
+                # clear row in GUI
+                table.item(item_id, values=(slot, "", ""))
 
     def manual_insert_player(self):
            
