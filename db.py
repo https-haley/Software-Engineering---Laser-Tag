@@ -44,11 +44,7 @@ def update_codename(conn, player_id, new_codename):
         cur.execute("UPDATE players SET codename = %s WHERE id = %s;", (new_codename, player_id))
     conn.commit()
 
-# Delete a player record from the database using their unique player ID
-def delete_player(conn, player_id):
-    with conn.cursor() as cur:
-        cur.execute("DELETE FROM players WHERE id = %s;", (player_id,))
-    conn.commit()
+
 
 
 
