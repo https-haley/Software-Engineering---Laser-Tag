@@ -29,3 +29,9 @@ def get_player_id(conn, codename):
         cur.execute("SELECT id FROM players WHERE codename = %s", (codename,))
         row = cur.fetchone()
         return row[0] if row else None
+
+def update_codename(conn, player_id, new_codename):
+    with conn.cursor() as cur:
+        cur.execute("UPDATE players SET codename = %s WHERE id = %s;", (new_codename, player_id))
+    conn.commit()
+
