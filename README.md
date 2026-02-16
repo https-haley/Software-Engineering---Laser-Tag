@@ -7,7 +7,7 @@
 | Timothy Pham    | timothypham045     |
 | Haley Trejo    | https.haley     |
 
-## **Requirements:**
+# **Requirements:**
 
 The provided Debian virtual machine already includes:
   
@@ -23,7 +23,7 @@ The install script will automatically install all remaining dependencies such as
 
 - virtualenv support
 
-## **Getting the Code using Git:**
+# **Getting the Code using Git:**
 
 First, open the provided Debian VM. Log in using username: student and password: student.
 
@@ -48,7 +48,7 @@ git clone https://github.com/https-haley/Software-Engineering---Laser-Tag.git
 ```
 cd Software-Engineering---Laser-Tag
 ```
-## Downloading the Project Without Git:
+# Downloading the Project Without Git:
 
 If you do not have Git installed, you can download the project as a ZIP file instead.
 
@@ -82,7 +82,7 @@ unzip Software-Engineering---Laser-Tag-main.zip
 ```
 cd Software-Engineering---Laser-Tag-main
 ```
-## **Other Installation Instructions (once the code is on your machine):**
+# **Other Installation Instructions (once the code is on your machine):**
 
 ### Run the install script:
 
@@ -94,7 +94,7 @@ chmod +x install.sh
 ```
 ./install.sh
 ```
-## Running the program
+# Running the program:
 
 Once all required dependencies are downloaded with the script, activate the virtual environment:
 
@@ -107,7 +107,7 @@ Run the program using:
 ```
 python3 main.py
 ```
-## **Notes:**
+# **Notes:**
 
 The database schema must not be modified.
 
@@ -122,6 +122,7 @@ Application tested on Debian VM environment.
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
