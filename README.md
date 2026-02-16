@@ -94,7 +94,7 @@ chmod +x install.sh
 ```
 # Running the program:
 
-Once installation is complete and you are inside the project directory (see the cd commands in the download steps above), activate the virtual environment:
+Once installation is complete and you are inside the project directory (using the cd commands in the download steps above), activate the virtual environment:
 
 ```
 source venv/bin/activate
@@ -120,6 +120,7 @@ Application tested on Debian VM environment.
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
