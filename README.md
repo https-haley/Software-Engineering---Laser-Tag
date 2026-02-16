@@ -80,7 +80,7 @@ unzip Software-Engineering---Laser-Tag-main.zip
 ```
 cd Software-Engineering---Laser-Tag-main
 ```
-# **Other Installation Instructions (once the code is on your machine):**
+# **Other Installation Instructions (once the code is on your machine and you are in the directory):**
 
 ### Run the install script:
 
@@ -120,6 +120,7 @@ Application tested on Debian VM environment.
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
