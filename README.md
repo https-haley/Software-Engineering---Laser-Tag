@@ -54,24 +54,13 @@ If you do not have Git installed, you can download the project as a ZIP file ins
 
 ### Steps:
 
-Open the repository page in your web browser
+Open the repository page in your web browser.
 
 Click the green Code button near the top of the page.
 
 Click Download ZIP.
 
 Save the file to your computer.
-
-### Extract the ZIP file:
-
-Run these commands in the VM terminal.
-
-```
-unzip Software-Engineering---Laser-Tag-main.zip
-```
-```
-cd Software-Engineering---Laser-Tag-main
-```
 
 ### If unzip is not installed, install it:
 
@@ -81,6 +70,18 @@ Run this command in the VM terminal.
 sudo apt install -y unzip
 ```
 
+### Extract the ZIP file:
+
+Run these commands in the VM terminal.
+```
+cd ~/Downloads
+```
+```
+unzip Software-Engineering---Laser-Tag-main.zip
+```
+```
+cd Software-Engineering---Laser-Tag-main
+```
 ## **Other Installation Instructions:**
 
 ### Run the install script:
@@ -121,6 +122,7 @@ Application tested on Debian VM environment.
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
