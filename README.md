@@ -46,7 +46,7 @@ git clone https://github.com/https-haley/Software-Engineering---Laser-Tag.git
 ```
 cd Software-Engineering---Laser-Tag
 ```
-# Downloading the Project Without Git:
+# Getting the Code Without Git:
 
 If you do not have Git installed, you can download the project as a ZIP file instead.
 
@@ -120,6 +120,7 @@ Application tested on Debian VM environment.
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
 To update an existing players username hit insert, then type the player ID, new username, and equipment ID (player must not already be added in the game). If the player is already added to the game, delete them first.
+
 
 
 
