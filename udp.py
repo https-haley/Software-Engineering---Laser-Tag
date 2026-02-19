@@ -30,7 +30,6 @@ def startUDP():
 
     # Enable broadcast permission on socket
     UDPClientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    UDPClientSocket.bind((localIP, broadcastPort))
 
     # Socket 2: Server socket (port 7501)
     # Used only for receiving UDP packets
