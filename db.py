@@ -2,10 +2,10 @@ import psycopg2
 
 # Database connection parameters
 params = {
-    "host": "localhost",
+    #"host": "localhost",
     "database": "photon",
-    "user": "student",
-    "password": "student"
+    #"user": "student",
+    #"password": "student"
 }
 
 # Establish and return a connection to the database
@@ -43,6 +43,7 @@ def update_codename(conn, player_id, new_codename):
         # Update codename for the specified player ID
         cur.execute("UPDATE players SET codename = %s WHERE id = %s;", (new_codename, player_id))
     conn.commit()
+
 
 
 
