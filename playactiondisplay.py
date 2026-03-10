@@ -9,6 +9,8 @@ class PlayActionDisplay:
         self.root.geometry("1000x700")
         self.root.configure(bg="black")
 
+        self.score_labels = {} # Keep track of score labels to update later
+
         # Title
         title = tk.Label(
             self.root,
@@ -37,7 +39,7 @@ class PlayActionDisplay:
             padx=10,
             pady=10
         )
-        event_frame.pack(pady=20)
+        event_frame.pack(pady=5, fill="both", expand=True)
 
         self.event_log = tk.Listbox(
             event_frame,
@@ -47,14 +49,18 @@ class PlayActionDisplay:
             fg="white",
             font=("Courier", 12)
         )
-        self.event_log.pack()
+        self.event_log.pack(fill="both", expand=True)
 
         # Placeholder text
         self.event_log.insert(tk.END, "Game events will appear here...")
 
     def create_team_display(self, parent, team_name, players, col, color):
+        # Container to hold team frame and score label
+        container = tk.Frame(parent, bg="black")
+        container.grid(row=0, column=col, padx=40)
+
         frame = tk.LabelFrame(
-            parent,
+            container,
             text=team_name,
             bg=color,
             fg="white",
@@ -62,13 +68,13 @@ class PlayActionDisplay:
             padx=10,
             pady=10
         )
-        frame.grid(row=0, column=col, padx=40)
+        frame.pack()
 
         table = ttk.Treeview(
             frame,
             columns=("Slot", "EquipmentID", "UserName"),
             show="headings",
-            height=20
+            height=15
         )
 
         table.heading("Slot", text="#")
@@ -84,6 +90,22 @@ class PlayActionDisplay:
         # Insert players
         for player in players:
             table.insert("", "end", values=player)
+
+        score_label = tk.Label(
+            container,
+            text="Score: 0",
+            font=("Arial", 20, "bold"),
+            fg="white",
+            bg="black",
+            pady=10
+        )
+        score_label.pack()
+
+        self.score_labels[team_name] = score_label
+
+    def update_score(self, team_name, new_score):
+        if team_name in self.score_labels:
+            self.score_labels[team_name].config(text=f"Score: {new_score}")
 
     def run(self):
         self.root.mainloop()
