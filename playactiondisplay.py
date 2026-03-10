@@ -11,7 +11,8 @@ class PlayActionDisplay:
 
         self.score_labels = {} # Keep track of score labels to update later
 
-        self.time_left = 360 # In seconds
+        self.countdown = 30 # 30 seconds pregame warning
+        self.time_left = 360 # In seconds *60 mins) game time
         self.timer_label = tk.Label(
             self.root,
             text="Time Remaining: 06:00",
@@ -119,7 +120,11 @@ class PlayActionDisplay:
             self.score_labels[team_name].config(text=f"Score: {new_score}")
 
     def update_timer(self):
-        if self.time_left > 0:
+         if self.countdown > 0:
+            self.timer_label.config(text=f"Starting in: 00:{self.countdown:02d}", fg="yellow")
+            self.countdown -= 1
+            self.root.after(1000, self.update_timer)
+        elif self.time_left > 0:
             mins, secs = divmod(self.time_left, 60) # Get quotient and remainder to get minutes and seconds remaining
             time_string = f"Time Remaining: {mins:02d}:{secs:02d}"
 
