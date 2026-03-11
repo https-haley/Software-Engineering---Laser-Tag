@@ -85,3 +85,26 @@ def broadcastEquipmentID(equipmentID):
 
     # Confirmation output
     print("Broadcasted equipment id:", equipmentID, "to", networkAddress, "port", broadcastPort)
+
+# Broadcast start game code 202
+def broadcastStartCode():
+    if not running:
+        print("UDP not started. Call startUDP() first.")
+        return
+
+    bytesToSend = b"202"
+    UDPClientSocket.sendto(bytesToSend, (networkAddress, broadcastPort))
+    print("Broadcasted start code: 202 to", networkAddress, "port", broadcastPort)
+
+
+# Broadcast end game code 221 three times
+def broadcastEndCode():
+    if not running:
+        print("UDP not started. Call startUDP() first.")
+        return
+
+    for _ in range(3):
+        bytesToSend = b"221"
+        UDPClientSocket.sendto(bytesToSend, (networkAddress, broadcastPort))
+
+    print("Broadcasted end code: 221 three times to", networkAddress, "port", broadcastPort)
