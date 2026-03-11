@@ -255,105 +255,6 @@ class PlayerEntry:
         for row in self.green_table.get_children():
             slot, equip, name = self.green_table.item(row, "values")
 
-    # Button callbacks
-    def f1_edit_game(self):      print("F1 Edit Game")
-    # Opens window allowing network address change
-    def f2_game_params(self):    
-        print("F2 Game Parameters")
-        win = tk.Toplevel(self.root)
-        win.title("Change Network Address")
-        win.configure(bg="black")
-        win.grab_set()
-    
-        tk.Label(win, text="Enter new network address:",
-                 fg="deepskyblue", bg="black",
-                 font=("Arial", 12, "bold")).pack(pady=10)
-    
-        entry = tk.Entry(win, width=30)
-        entry.pack(padx=15, pady=10)
-        entry.insert(0, udp.networkAddress)
-        entry.focus_set()
-    
-        def apply():
-            new_addr = entry.get().strip()
-            if new_addr != "":
-                udp.setNetworkAddress(new_addr)
-            win.destroy()
-    
-        tk.Button(win, text="Apply", command=apply,
-                  bg="black", fg="lime", bd=2,
-                  relief="solid", padx=16, pady=6).pack(pady=10)
-    
-        win.bind("<Return>", lambda e: apply())
-        
-    # Start the game
-    def f3_start_game(self):
-        print("F3 Start Game")
-
-        red_players = []
-        green_players = []
-
-        # Read red team table
-        for row in self.red_table.get_children():
-            slot, equip, name = self.red_table.item(row, "values")
-
-            if str(equip).strip() != "" and str(name).strip() != "":
-                red_players.append((int(slot), int(equip), str(name)))
-
-        # Read green team table
-        for row in self.green_table.get_children():
-            slot, equip, name = self.green_table.item(row, "values")
-
-            if str(equip).strip() != "" and str(name).strip() != "":
-    # Button callbacks
-    def f1_edit_game(self):      print("F1 Edit Game")
-    # Opens window allowing network address change
-    def f2_game_params(self):    
-        print("F2 Game Parameters")
-        win = tk.Toplevel(self.root)
-        win.title("Change Network Address")
-        win.configure(bg="black")
-        win.grab_set()
-    
-        tk.Label(win, text="Enter new network address:",
-                 fg="deepskyblue", bg="black",
-                 font=("Arial", 12, "bold")).pack(pady=10)
-    
-        entry = tk.Entry(win, width=30)
-        entry.pack(padx=15, pady=10)
-        entry.insert(0, udp.networkAddress)
-        entry.focus_set()
-    
-        def apply():
-            new_addr = entry.get().strip()
-            if new_addr != "":
-                udp.setNetworkAddress(new_addr)
-            win.destroy()
-    
-        tk.Button(win, text="Apply", command=apply,
-                  bg="black", fg="lime", bd=2,
-                  relief="solid", padx=16, pady=6).pack(pady=10)
-    
-        win.bind("<Return>", lambda e: apply())
-        
-    # Start the game
-    def f3_start_game(self):
-        print("F3 Start Game")
-
-        red_players = []
-        green_players = []
-
-        # Read red team table
-        for row in self.red_table.get_children():
-            slot, equip, name = self.red_table.item(row, "values")
-
-            if str(equip).strip() != "" and str(name).strip() != "":
-                red_players.append((int(slot), int(equip), str(name)))
-
-        # Read green team table
-        for row in self.green_table.get_children():
-            slot, equip, name = self.green_table.item(row, "values")
-
             if str(equip).strip() != "" and str(name).strip() != "":
                 green_players.append((int(slot), int(equip), str(name)))
 
@@ -362,34 +263,8 @@ class PlayerEntry:
             messagebox.showerror("No Players", "Add players before starting the game.")
             return
 
-        # Close player entry window
-        self.root.destroy()
-
-        # Launch play action display
-        display = PlayActionDisplay(red_players, green_players)
-        display.run()
-
-    def f5_preentered(self):     print("F5 PreEntered Games")green_players.append((int(slot), int(equip), str(name)))
-
-        # Require at least one player
-        if len(red_players) == 0 and len(green_players) == 0:
-            messagebox.showerror("No Players", "Add players before starting the game.")
-            return
-
-        # Close player entry window
-        self.root.destroy()
-
-        # Launch play action display
-        display = PlayActionDisplay(red_players, green_players)
-        display.run()
-
-    def f5_preentered(self):     print("F5 PreEntered Games")if str(equip).strip() != "" and str(name).strip() != "":
-            green_players.append((int(slot), int(equip), str(name)))
-
-        # Require at least one player
-        if len(red_players) == 0 and len(green_players) == 0:
-            messagebox.showerror("No Players", "Add players before starting the game.")
-            return
+        # Close database connection
+        self.conn.close()
 
         # Close player entry window
         self.root.destroy()
