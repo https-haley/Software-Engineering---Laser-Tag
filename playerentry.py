@@ -179,7 +179,7 @@ class PlayerEntry:
         make_btn("F2\nGame\nParameters", self.f2_game_params).pack(side="left", padx=10)
         make_btn("F3\nStart\nGame", self.f3_start_game).pack(side="left", padx=10)
         make_btn("F5\nPreEntered\nGames", self.f5_preentered).pack(side="left", padx=40)
-        make_btn("F7", self.f7_unused).pack(side="left", padx=10)
+        make_btn("F7\nUpdate\nPlayers", self.f7_updateplayers).pack(side="left", padx=10)
         make_btn("F8\nView\nGame", self.f8_view_game).pack(side="left", padx=10)
         make_btn("F10\nFlick\nSync", self.f10_flick_sync).pack(side="left", padx=40)
         make_btn("F12\nClear\nGame", self.f12_clear_game).pack(side="left", padx=10)
@@ -201,7 +201,7 @@ class PlayerEntry:
         self.root.bind("<F2>",  lambda e: self.f2_game_params())
         self.root.bind("<F3>",  lambda e: self.f3_start_game())
         self.root.bind("<F5>",  lambda e: self.f5_preentered())
-        self.root.bind("<F7>",  lambda e: self.f7_unused())
+        self.root.bind("<F7>",  lambda e: self.f7_updateplayers())
         self.root.bind("<F8>",  lambda e: self.f8_view_game())
         self.root.bind("<F10>", lambda e: self.f10_flick_sync())
         self.root.bind("<F12>", lambda e: self.f12_clear_game())
@@ -284,7 +284,9 @@ class PlayerEntry:
         Countdown(self.root, 30, start_game)
 
     def f5_preentered(self):     print("F5 PreEntered Games")
-    def f7_unused(self):         print("F7 pressed")
+    def f7_updateplayers(self):         
+        print("F7 Update Players")
+        self.update_player_window()
     def f8_view_game(self):      print("F8 View Game")
     def f10_flick_sync(self):    print("F10 Flick Sync")
     # Clears all players from both teams
@@ -453,6 +455,85 @@ class PlayerEntry:
                   bd=2, relief="solid", padx=16, pady=6).pack(pady=10)
 
         win.bind("<Return>", lambda e: save())
+
+    def update_player_window(self):
+        win = tk.Toplevel(self.root)
+        win.title("Update Player")
+        win.configure(bg="black")
+        win.grab_set()
+
+        tk.Label(win, text="Player ID:", fg="white", bg="black").pack(pady=5)
+        id_entry = tk.Entry(win)
+        id_entry.pack(pady=5)
+        id_entry.focus_set()
+
+        tk.Label(win, text="Current Codename:", fg="white", bg="black").pack(pady=5)
+        current_label = tk.Label(win, text="", fg="deepskyblue", bg="black")
+        current_label.pack(pady=5)
+
+        tk.Label(win, text="New Codename:", fg="white", bg="black").pack(pady=5)
+        new_name_entry = tk.Entry(win)
+        new_name_entry.pack(pady=5)
+
+        def lookup():
+            pid_text = id_entry.get().strip()
+            if not pid_text.isdigit():
+                messagebox.showerror("Invalid", "Player ID must be an integer.")
+                win.lift()
+                win.focus_force()
+                id_entry.focus_set()
+                return
+
+            player_id = int(pid_text)
+            existing_name = db.get_codename(self.conn, player_id)
+
+            if existing_name:
+                current_label.config(text=existing_name)
+                new_name_entry.focus_set()
+            else:
+                messagebox.showerror("Not Found", "Player ID does not exist.")
+                win.lift()
+                win.focus_force()
+                id_entry.focus_set()
+                return
+
+        def update_player():
+            pid_text = id_entry.get().strip()
+            new_name = new_name_entry.get().strip()
+
+            if not pid_text.isdigit():
+                messagebox.showerror("Invalid", "Player ID must be an integer.")
+                win.lift()
+                win.focus_force()
+                id_entry.focus_set()
+                return
+
+            if new_name == "":
+                messagebox.showerror("Invalid", "New codename cannot be blank.")
+                win.lift()
+                win.focus_force()
+                new_name_entry.focus_set()
+                return
+
+            player_id = int(pid_text)
+            existing_name = db.get_codename(self.conn, player_id)
+
+            if not existing_name:
+                messagebox.showerror("Not Found", "Player ID does not exist.")
+                win.lift()
+                win.focus_force()
+                id_entry.focus_set()
+                return
+
+            db.update_codename(self.conn, player_id, new_name)
+            current_label.config(text=new_name)
+            messagebox.showinfo("Success", "Player updated successfully.")
+
+        tk.Button(win, text="Lookup", command=lookup,
+            bg="black", fg="lime", bd=2, relief="solid").pack(pady=5)
+
+        tk.Button(win, text="Update", command=update_player,
+            bg="black", fg="lime", bd=2, relief="solid").pack(pady=5)
 
     # Start Tkinter event loop
     def run(self):
