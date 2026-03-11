@@ -187,7 +187,7 @@ class PlayerEntry:
         # Instruction hint label
         hint = tk.Label(
             bar,
-            text="<Del> to Delete Player, <Ins> to Manually Insert, or edit codename",
+            text="<Del> to Delete Player, <Ins> to Manually Insert Players",
             bg="lightgray",
             fg="black",
             font=("Arial", 11)
@@ -385,6 +385,7 @@ class PlayerEntry:
                 messagebox.showerror("Invalid", "Player ID must be an integer.")
                 win.lift()
                 win.focus_force()
+                id_entry.focus_set()
                 return
 
             player_id = int(pid_text)
@@ -395,6 +396,7 @@ class PlayerEntry:
                 messagebox.showerror("Invalid", "Equipment ID must be an integer.")
                 win.lift()
                 win.focus_force()
+                equip_entry.focus_set()
                 return
             equipment_id = int(equip_text)
 
@@ -407,6 +409,7 @@ class PlayerEntry:
                         f"Equipment ID {equipment_id} already exists.")
                         win.lift()
                         win.focus_force()
+                        equip_entry.focus_set()
                         return
 
             # Check duplicate player ID already in roster
@@ -423,6 +426,7 @@ class PlayerEntry:
                                             f"Player ID {player_id} is already in the game.")
                         win.lift()
                         win.focus_force()
+                        id_entry.focus_set()
                         return
 
             # Check database for existing codename
@@ -528,6 +532,7 @@ class PlayerEntry:
             db.update_codename(self.conn, player_id, new_name)
             current_label.config(text=new_name)
             messagebox.showinfo("Success", "Player updated successfully.")
+            win.destroy()
 
         tk.Button(win, text="Lookup", command=lookup,
             bg="black", fg="lime", bd=2, relief="solid").pack(pady=5)
