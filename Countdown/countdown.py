@@ -17,7 +17,7 @@ class Countdown:
         self.image_dir = os.path.join(os.path.dirname(__file__), "Countdown_Images")
 
         self.image_label = tk.Label(self.root, bg="black")
-        self.image_label.pack()
+        self.image_label.place(relx=0.5, rely=0.5, anchor="center")
         self.update_image()
 
     def update_image(self):
@@ -34,3 +34,4 @@ class Countdown:
                 self.on_complete()  # Call the completion callback if provided
 
             
+
