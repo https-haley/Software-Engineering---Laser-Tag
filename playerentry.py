@@ -276,6 +276,7 @@ class PlayerEntry:
             widget.destroy()
 
         def start_game():
+            udp.broadcastStartCode()
             for widget in self.root.winfo_children():
                 widget.destroy()
             PlayActionDisplay(self.root, red_players, green_players)
@@ -344,6 +345,31 @@ class PlayerEntry:
         name_entry = tk.Entry(win)
         name_entry.pack(pady=5)
 
+        def lookup_player_id(event=None):
+            pid_text = id_entry.get().strip()
+
+            # If Player ID is not a valid integer yet allow typing
+            if not pid_text.isdigit():
+                name_entry.config(state="normal")
+                name_entry.delete(0, tk.END)
+                return
+
+            player_id = int(pid_text)
+            existing_name = db.get_codename(self.conn, player_id)
+
+            if existing_name:
+                # Existing player, auto fill codename and lock the field
+                name_entry.config(state="normal")
+                name_entry.delete(0, tk.END)
+                name_entry.insert(0, existing_name)
+                name_entry.config(state="disabled")
+            else:
+                # New player, clear codename field and allow typing
+                name_entry.config(state="normal")
+                name_entry.delete(0, tk.END)
+                
+        id_entry.bind("<KeyRelease>", lookup_player_id)
+
         # Equipment ID entry
         tk.Label(win, text="Equipment ID:", fg="white", bg="black").pack()
         equip_entry = tk.Entry(win)
@@ -403,17 +429,15 @@ class PlayerEntry:
             typed_name = name_entry.get().strip()
 
             if existing_name:
-                # Update name if user entered a new one
-                if typed_name != "" and typed_name != existing_name:
-                    db.update_codename(self.conn, player_id, typed_name)
-                    codename = typed_name
-                else:
-                    codename = existing_name
+                codename = existing_name
             else:
                 # New player must supply codename
                 codename = typed_name
                 if codename == "":
                     messagebox.showerror("Invalid", "New player requires a codename.")
+                    win.lift()
+                    win.focus_force()
+                    name_entry.focus_set()
                     return
                 db.insert_player(self.conn, player_id, codename)
 
