@@ -266,12 +266,12 @@ class PlayerEntry:
         # Close database connection
         self.conn.close()
 
-        # Close player entry window
-        self.root.destroy()
+        # Remove all widgets from the window
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
-        # Launch play action display
-        display = PlayActionDisplay(red_players, green_players)
-        display.run()
+        # Load play action display in same window
+        display = PlayActionDisplay(self.root, red_players, green_players)
 
     def f5_preentered(self):     print("F5 PreEntered Games")
     def f7_unused(self):         print("F7 pressed")
