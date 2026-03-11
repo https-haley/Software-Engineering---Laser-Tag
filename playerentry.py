@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from playactiondisplay import PlayActionDisplay
+from Countdown.countdown import Countdown
 
 import udp
 import db
@@ -56,7 +57,9 @@ class PlayerEntry:
     
     # Close database connection on exit
     def on_close(self):
-        self.conn.close()
+        if self.conn:
+            self.conn.close()
+            self.conn = None
         self.root.destroy()
 
     # Set currently selected team
@@ -264,14 +267,18 @@ class PlayerEntry:
             return
 
         # Close database connection
-        self.conn.close()
+        if self.conn:
+            self.conn.close()
+            self.conn = None
 
         # Remove all widgets from the window
         for widget in self.root.winfo_children():
             widget.destroy()
 
-        # Load play action display in same window
-        display = PlayActionDisplay(self.root, red_players, green_players)
+        def start_game():
+            PlayActionDisplay(self.root, red_players, green_players)
+
+        Countdown(self.root, 30, start_game)
 
     def f5_preentered(self):     print("F5 PreEntered Games")
     def f7_unused(self):         print("F7 pressed")
