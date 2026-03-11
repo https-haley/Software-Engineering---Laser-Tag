@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import udp
 
 
 class PlayActionDisplay:
@@ -11,7 +12,7 @@ class PlayActionDisplay:
 
         self.score_labels = {} # Keep track of score labels to update later
 
-        self.time_left = 360 # In seconds *60 mins) game time
+        self.time_left = 360 # In seconds 6 min game time
         self.timer_label = tk.Label(
             self.root,
             text="Time Remaining: 06:00",
@@ -129,3 +130,4 @@ class PlayActionDisplay:
             self.root.after(1000, self.update_timer) # Wait 1 second to update timer
         else:
             self.timer_label.config(text = "Game Over", fg="red")
+            udp.broadcastEndCode()
