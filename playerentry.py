@@ -276,6 +276,8 @@ class PlayerEntry:
             widget.destroy()
 
         def start_game():
+            for widget in self.root.winfo_children():
+                widget.destroy()
             PlayActionDisplay(self.root, red_players, green_players)
 
         Countdown(self.root, 30, start_game)
