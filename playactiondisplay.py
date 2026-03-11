@@ -120,7 +120,7 @@ class PlayActionDisplay:
             self.score_labels[team_name].config(text=f"Score: {new_score}")
 
     def update_timer(self):
-         if self.countdown > 0:
+        if self.countdown > 0:
             self.timer_label.config(text=f"Starting in: 00:{self.countdown:02d}", fg="yellow")
             self.countdown -= 1
             self.root.after(1000, self.update_timer)
