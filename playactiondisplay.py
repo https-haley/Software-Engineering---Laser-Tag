@@ -3,8 +3,8 @@ from tkinter import ttk
 
 
 class PlayActionDisplay:
-    def __init__(self, red_players, green_players):
-        self.root = tk.Tk()
+    def __init__(self, root, red_players, green_players):
+        self.root = root
         self.root.title("Play Action Display")
         self.root.geometry("1000x700")
         self.root.configure(bg="black")
@@ -134,22 +134,3 @@ class PlayActionDisplay:
             self.root.after(1000, self.update_timer) # Wait 1 second to update timer
         else:
             self.timer_label.config(text = "Game Over", fg="red")
-
-    def run(self):
-        self.root.mainloop()
-
-
-# Test run if executed directly
-if __name__ == "__main__":
-    red_players = [
-        (0, 101, "Timothy"),
-        (1, 102, "Alex")
-    ]
-
-    green_players = [
-        (0, 201, "Chris"),
-        (1, 202, "Sam")
-    ]
-
-    app = PlayActionDisplay(red_players, green_players)
-    app.run()
