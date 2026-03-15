@@ -121,6 +121,9 @@ If you'd like to select a different network for UDP sockets, hit f2 on the playe
 
 To insert a player, hit the insert key and fill in the player ID, codename, and equipment ID. To update an existing player, hit f7, enter their player ID, and change the codename as needed. If the wrong equipment ID is used, delete the player from the entry screen and re-enter with the correct ID. 
 
+To clear the player entry screen of all players, hit F12.
+
+Once all players are entered correctly, hit F3 to start the game.
 
 
 
