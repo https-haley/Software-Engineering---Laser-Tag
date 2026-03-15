@@ -110,7 +110,7 @@ class PlayActionDisplay:
 
         score_label = tk.Label(
             container,
-            text="Score: 0",
+            text="Total Score: 0",
             font=("Arial", 20, "bold"),
             fg="white",
             bg="black",
