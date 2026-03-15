@@ -119,7 +119,11 @@ Application tested on Debian VM environment.
 
 If you'd like to select a different network for UDP sockets, hit f2 on the player entry screen.
 
-To insert a player, hit the insert key and fill in the player ID, codename, and equipment ID. To update an existing player, hit f7, enter their player ID, and change the codename as needed. If the wrong equipment ID is used, delete the player from the entry screen and re-enter with the correct ID. 
+To insert a player, hit the insert key and fill in the player ID, codename, and equipment ID. 
+
+To update an existing player, hit f7, enter their player ID and hit lookup. Change the codename as needed, and then hit update 
+
+If the wrong equipment ID is used, delete the player from the entry screen using the delete key and re-enter with the correct ID. 
 
 To clear the player entry screen of all players, hit F12.
 
