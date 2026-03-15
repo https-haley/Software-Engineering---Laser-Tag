@@ -84,7 +84,7 @@ class PlayActionDisplay:
 
         table = ttk.Treeview(
             frame,
-            columns=("Slot", "EquipmentID", "UserName"),
+            columns=("Slot", "EquipmentID", "UserName", "Score"),
             show="headings",
             height=15
         )
@@ -92,16 +92,21 @@ class PlayActionDisplay:
         table.heading("Slot", text="#")
         table.heading("EquipmentID", text="Equip ID")
         table.heading("UserName", text="Codename")
+        table.heading("Score", text="Score")
 
         table.column("Slot", width=40, anchor="center")
         table.column("EquipmentID", width=100, anchor="center")
         table.column("UserName", width=160, anchor="center")
+        table.column("Score", width=80, anchor="center")
 
         table.pack()
 
         # Insert players
         for player in players:
-            table.insert("", "end", values=player)
+            if len(player) == 3:
+                table.insert("", "end", values=(player[0], player[1], player[2], 0))
+            else:
+                table.insert("", "end", values=player)
 
         score_label = tk.Label(
             container,
