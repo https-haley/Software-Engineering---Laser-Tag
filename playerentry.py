@@ -279,10 +279,10 @@ class PlayerEntry:
             widget.destroy()
 
         def start_game():
-            udp.broadcastStartCode()
             for widget in self.root.winfo_children():
                 widget.destroy()
-            PlayActionDisplay(self.root, red_players, green_players)
+            display = PlayActionDisplay(self.root, red_players, green_players, self.music)
+            udp.broadcastStartCode()
 
         Countdown(self.root, 30, start_game)
 
