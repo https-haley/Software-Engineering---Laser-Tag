@@ -1,6 +1,7 @@
 # Imports
 import socket
 import threading
+import time
 
 # Defaults
 networkAddress   = "127.0.0.1"   
@@ -16,6 +17,14 @@ running = False
 UDPClientSocket = None
 UDPServerSocket = None
 receiverThread  = None
+
+# Message handler to connect to GUI
+message_handler = None
+
+# Allow GUI to register callback
+def setMessageHandler(handler):
+    global message_handler
+    message_handler = handler
 
 # Creates sockets and starts receiver thread
 def startUDP():
@@ -54,15 +63,21 @@ def startUDP():
 # Runs continuously in background thread and waits for packets and prints sender info
 def receiveLoop():
     while running:
-        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-        message = bytesAddressPair[0]
-        address = bytesAddressPair[1]
+        try:
+            bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+            message = bytesAddressPair[0]
+            address = bytesAddressPair[1]
 
-        clientMsg = "Message from Client:{}".format(message.decode(errors="replace"))
-        clientIP  = "Client IP Address:{}".format(address)
+            decoded = message.decode(errors="replace").strip()
 
-        print(clientMsg)
-        print(clientIP)
+            print("Message from Client:", decoded)
+            print("Client IP Address:", address)
+
+            if message_handler:
+                message_handler(decoded)
+
+        except Exception as e:
+            print("UDP receive error:", e)
 
 # Change network address option
 def setNetworkAddress(newNetwork):
@@ -106,5 +121,19 @@ def broadcastEndCode():
     for _ in range(3):
         bytesToSend = b"221"
         UDPClientSocket.sendto(bytesToSend, (networkAddress, broadcastPort))
+        time.sleep(0.1)
 
     print("Broadcasted end code: 221 three times to", networkAddress, "port", broadcastPort)
+
+# Broadcast a code to track team scoring
+def broadcastCode(code):
+    if not running:
+        print("UDP not started. Call startUDP() first.")
+        return
+
+    try:
+        bytesToSend = str(int(code)).encode()
+        UDPClientSocket.sendto(bytesToSend, (networkAddress, broadcastPort))
+        print(f"Broadcasted code: {code}")
+    except Exception as e:
+        print("Broadcast error:", e)
