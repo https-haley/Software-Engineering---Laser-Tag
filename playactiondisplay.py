@@ -14,6 +14,8 @@ class PlayActionDisplay:
         self.players_with_base = set()
         self.team_tables = {}
         self.player_map = {}
+        self.red_ids = [x[1] for x in red_players]
+        self.green_ids = [x[1] for x in green_players]
 
         self.score_labels = {} # Keep track of score labels to update later
 
@@ -215,6 +217,12 @@ class PlayActionDisplay:
                 target_name = self.get_player_name(target)
 
                 self.log_event(f"{attacker_name} tagged {target_name}")
+
+                both_red = (attacker in self.red_ids) and (target in self.red_ids)
+                both_green = (attacker in self.green_ids) and (target in self.green_ids)
+
+                if both_red and both_green:
+                    udp.broadcastEquipmentID(attacker)
 
                 udp.broadcastEquipmentID(target)
 
