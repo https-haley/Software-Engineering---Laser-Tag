@@ -5,7 +5,7 @@ import udp
 
 
 class PlayActionDisplay:
-    def __init__(self, root, red_players, green_players):
+    def __init__(self, root, red_players, green_players, music):
         self.root = root
         self.root.title("Play Action Display")
         self.root.geometry("1000x700")
@@ -16,6 +16,7 @@ class PlayActionDisplay:
         self.player_map = {}
         self.red_ids = [x[1] for x in red_players]
         self.green_ids = [x[1] for x in green_players]
+        self.music = music
 
         self.score_labels = {} # Keep track of score labels to update later
 
