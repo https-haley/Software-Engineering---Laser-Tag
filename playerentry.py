@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from playactiondisplay import PlayActionDisplay
 from Countdown.countdown import Countdown
+from music import MusicPlayer
 
 import udp
 import db
@@ -14,6 +15,8 @@ class PlayerEntry:
         self.root.title("Entry Terminal")
         self.root.geometry("1080x720")
         self.root.configure(bg="black")
+        #Music
+        self.music = MusicPlayer()
         # Tracks which team is currently active for insertion
         self.active_team = "RED"  
 
