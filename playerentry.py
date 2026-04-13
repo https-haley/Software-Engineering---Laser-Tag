@@ -284,7 +284,7 @@ class PlayerEntry:
             display = PlayActionDisplay(self.root, red_players, green_players, self.music)
             udp.broadcastStartCode()
 
-        Countdown(self.root, 30, start_game)
+        Countdown(self.root, 30, start_game, self.music)
 
     def f5_preentered(self):     print("F5 PreEntered Games")
     def f7_updateplayers(self):         
