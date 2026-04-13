@@ -180,7 +180,7 @@ class PlayActionDisplay:
         if self.last_attacker in self.player_map:
             team_name, item = self.player_map[self.last_attacker]
 
-            if team_name.lower().startswith(scoring_team):
+            if team_name == f"{scoring_team.upper()} TEAM" and self.last_attacker not in self.players_with_base:
 
                 # Give icon
                 self.give_base_icon(self.last_attacker)
@@ -196,6 +196,7 @@ class PlayActionDisplay:
                 table.item(item, values=values)
                 name = self.get_player_name(self.last_attacker)
                 self.log_event(f"{name} captured the base (+100)")
+                self.update_team_score(team_name)
 
     def get_player_name(self, equipment_id):
         if equipment_id in self.player_map:
@@ -210,11 +211,21 @@ class PlayActionDisplay:
             if ":" in msg:
                 attacker, target = msg.split(":")
                 attacker = int(attacker)
-                target = int(target)
 
                 self.last_attacker = attacker
-
                 attacker_name = self.get_player_name(attacker)
+
+                if target == "43":
+                    self.log_event(f"{attacker_name} captured the Green Base")
+                    self.assign_base_to_last_attacker("red")
+                    return
+
+                if target == "53":
+                    self.log_event(f"{attacker_name} captured the Red Base")
+                    self.assign_base_to_last_attacker("green")
+                    return
+
+                target = int(target)
                 target_name = self.get_player_name(target)
 
                 self.log_event(f"{attacker_name} tagged {target_name}")
@@ -229,14 +240,6 @@ class PlayActionDisplay:
                 else:
                     # Normal hit
                     udp.broadcastEquipmentID(target)
-
-            elif msg == "53":
-                self.log_event("RED BASE HIT")
-                self.assign_base_to_last_attacker("green")
-
-            elif msg == "43":
-                self.log_event("GREEN BASE HIT")
-                self.assign_base_to_last_attacker("red")
 
         except Exception as e:
             print("Error:", e)
