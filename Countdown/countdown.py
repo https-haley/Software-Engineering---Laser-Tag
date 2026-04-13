@@ -2,13 +2,15 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import os
 class Countdown:
-    def __init__(self, root, duration=30, on_complete=None):
+    def __init__(self, root, duration=30, on_complete=None, music=None):
         self.duration = duration
         self.root = root
         self.root.title("Game Starting Soon")
         self.root.configure(bg="black")
         self.count = duration
         self.on_complete = on_complete
+        self.music = music
+        self.music_started = False
 
         # Clear previous screen
         for widget in self.root.winfo_children():
@@ -22,6 +24,9 @@ class Countdown:
 
     def update_image(self):
         if self.count >= 0:
+            if self.count == 17 and self.music and not self.music_started:
+                self.music.play_random_track()
+                self.music_started = True
             image_path = os.path.join(self.image_dir, f"{self.count}.tif")
             img = Image.open(image_path)
             photo = ImageTk.PhotoImage(img)
