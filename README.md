@@ -21,6 +21,8 @@ The install script will automatically install all remaining dependencies such as
 
 - virtualenv support
 
+- pygame
+
 # **Getting the Code using Git:**
 
 First, open the provided Debian VM. Log in using username: student and password: student.
