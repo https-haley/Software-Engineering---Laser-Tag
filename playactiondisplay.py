@@ -222,17 +222,20 @@ class PlayActionDisplay:
                 both_red = (attacker in self.red_ids) and (target in self.red_ids)
                 both_green = (attacker in self.green_ids) and (target in self.green_ids)
 
-                if both_red and both_green:
+                if both_red or both_green:
+                    # Friendly fire
                     udp.broadcastEquipmentID(attacker)
-
-                udp.broadcastEquipmentID(target)
+                    udp.broadcastEquipmentID(target)
+                else:
+                    # Normal hit
+                    udp.broadcastEquipmentID(target)
 
             elif msg == "53":
-                self.log_event("Red base hit")
+                self.log_event("RED BASE HIT")
                 self.assign_base_to_last_attacker("green")
 
             elif msg == "43":
-                self.log_event("Green base hit")
+                self.log_event("GREEN BASE HIT")
                 self.assign_base_to_last_attacker("red")
 
         except Exception as e:
