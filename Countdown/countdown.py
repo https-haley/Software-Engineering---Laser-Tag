@@ -24,7 +24,7 @@ class Countdown:
 
     def update_image(self):
         if self.count >= 0:
-            if self.count == 13 and self.music and not self.music_started:
+            if self.count == 15 and self.music and not self.music_started:
                 self.music.play_random_track()
                 self.music_started = True
             image_path = os.path.join(self.image_dir, f"{self.count}.tif")
@@ -36,7 +36,7 @@ class Countdown:
             if self.count > 5:
                  delay = 1000
             else:
-                 delay = 1400   # Slow down last 5 numbers to match audio
+                 delay = 1425   # Slow down last 5 numbers to match audio
 
             self.root.after(delay, self.update_image)
         else:
