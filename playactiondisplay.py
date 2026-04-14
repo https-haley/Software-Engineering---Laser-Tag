@@ -147,6 +147,48 @@ class PlayActionDisplay:
         if team_name in self.score_labels:
             self.score_labels[team_name].config(text=f"Score: {new_score}")
 
+    def change_player_score(self, equipment_id, amount):
+        if equipment_id not in self.player_map:
+            return
+
+        team_name, item = self.player_map[equipment_id]
+        table = self.team_tables[team_name]
+
+        values = list(table.item(item, "values"))
+        current_score = int(values[3])
+        new_score = current_score + amount
+        values[3] = new_score
+
+        table.item(item, values=values)
+
+        self.update_team_score(team_name)
+        self.sort_team_table(team_name)
+
+    def update_team_score(self, team_name):
+        table = self.team_tables[team_name]
+        total = 0
+
+        for item in table.get_children():
+            values = table.item(item, "values")
+            total += int(values[3])
+
+        if team_name in self.score_labels:
+            self.score_labels[team_name].config(text=f"Total Score: {total}")
+            
+    def sort_team_table(self, team_name):
+        table = self.team_tables[team_name]
+
+        rows = []
+        for item in table.get_children():
+            values = table.item(item, "values")
+            score = int(values[3])
+            rows.append((score, item, values, table.item(item, "text")))
+
+        rows.sort(key=lambda x: x[0], reverse=True)
+
+        for index, (_score, item, _values, _text) in enumerate(rows):
+            table.move(item, "", index)
+
     def update_timer(self):
         if self.time_left > 0:
             mins, secs = divmod(self.time_left, 60) # Get quotient and remainder to get minutes and seconds remaining
