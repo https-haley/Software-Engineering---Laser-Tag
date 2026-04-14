@@ -33,7 +33,12 @@ class Countdown:
             self.image_label.config(image=photo)
             self.image_label.image = photo  # Keep a reference to prevent garbage collection
             self.count -= 1
-            self.root.after(1000, self.update_image)  # Schedule next update after 1 second
+            if self.count > 5:
+                 delay = 1000
+            else:
+                 delay = 1400   # Slow down last 5 numbers to match audio
+
+self.root.after(delay, self.update_image)
         else:
             if self.on_complete:
                 self.on_complete()  # Call the completion callback if provided
