@@ -340,13 +340,13 @@ class PlayActionDisplay:
                 if target == "43":
                     self.log_event(f"{attacker_name} captured the Green Base (+100)")
                     self.assign_base_to_last_attacker("red")
-                    udp.broadcastEquipmentID(attacker)
+                    udp.broadcastCode(43)
                     return
 
                 if target == "53":
                     self.log_event(f"{attacker_name} captured the Red Base (+100)")
                     self.assign_base_to_last_attacker("green")
-                    udp.broadcastEquipmentID(attacker)
+                    udp.broadcastCode(53)
                     return
 
                 target = int(target)
