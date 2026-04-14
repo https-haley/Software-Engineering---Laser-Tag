@@ -265,8 +265,8 @@ class PlayerEntry:
                 green_players.append((int(slot), int(equip), str(name)))
 
         # Require at least one player
-        if len(red_players) == 0 and len(green_players) == 0:
-            messagebox.showerror("No Players", "Add players before starting the game.")
+        if len(red_players) == 0 or len(green_players) == 0:
+            messagebox.showerror("No Players", "Add players to both teams before starting the game.")
             return
 
         # Close database connection
