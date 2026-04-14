@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+from playerentry import PlayerEntry
 import udp
 
 
@@ -17,6 +18,9 @@ class PlayActionDisplay:
         self.red_ids = [x[1] for x in red_players]
         self.green_ids = [x[1] for x in green_players]
         self.music = music
+        self.flash_state = False
+        self.leading_team = None
+        self.return_button_shown = False
 
         self.score_labels = {} # Keep track of score labels to update later
 
@@ -70,7 +74,7 @@ class PlayActionDisplay:
             font=("Courier", 12)
         )
         self.event_log.pack(fill="both", expand=True)
-
+        
         # Placeholder text
         self.event_log.insert(tk.END, "Game events will appear here...")
 
@@ -78,6 +82,7 @@ class PlayActionDisplay:
         img = Image.open("baseicon.jpg")  
         img = img.resize((20, 20))
         self.base_icon = ImageTk.PhotoImage(img)
+        self.flash_leading_team()
 
         udp.setMessageHandler(self.handle_udp_message)
         udp.startUDP()
@@ -143,6 +148,18 @@ class PlayActionDisplay:
 
         self.score_labels[team_name] = score_label
 
+    def return_to_entry(self):
+        import udp
+        udp.running = False
+        
+        # Clear screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Restart entry screen
+        from playerentry import PlayerEntry
+        entry = PlayerEntry(self.root)
+
     def update_score(self, team_name, new_score):
         if team_name in self.score_labels:
             self.score_labels[team_name].config(text=f"Score: {new_score}")
@@ -175,6 +192,8 @@ class PlayActionDisplay:
         if team_name in self.score_labels:
             self.score_labels[team_name].config(text=f"Total Score: {total}")
             
+        self.update_leading_team()
+            
     def sort_team_table(self, team_name):
         table = self.team_tables[team_name]
 
@@ -189,6 +208,45 @@ class PlayActionDisplay:
         for index, (_score, item, _values, _text) in enumerate(rows):
             table.move(item, "", index)
 
+    def update_leading_team(self):
+        red_total = self.get_team_score("RED TEAM")
+        green_total = self.get_team_score("GREEN TEAM")
+
+        if red_total > green_total:
+            self.leading_team = "RED TEAM"
+        elif green_total > red_total:
+            self.leading_team = "GREEN TEAM"
+        else:
+            self.leading_team = None
+
+    def get_team_score(self, team_name):
+        table = self.team_tables[team_name]
+        total = 0
+
+        for item in table.get_children():
+            values = table.item(item, "values")
+            total += int(values[3])
+
+        return total
+
+    def flash_leading_team(self):
+        if self.leading_team:
+            label = self.score_labels[self.leading_team]
+
+            if self.flash_state:
+                label.config(fg="yellow")
+            else:
+                label.config(fg="white")
+
+            self.flash_state = not self.flash_state
+
+        # Reset other team to normal
+        for team, label in self.score_labels.items():
+            if team != self.leading_team:
+                label.config(fg="white")
+
+        self.root.after(500, self.flash_leading_team)
+
     def update_timer(self):
         if self.time_left > 0:
             mins, secs = divmod(self.time_left, 60) # Get quotient and remainder to get minutes and seconds remaining
@@ -200,11 +258,32 @@ class PlayActionDisplay:
             self.root.after(1000, self.update_timer) # Wait 1 second to update timer
         else:
             self.timer_label.config(text = "Game Over", fg="red")
-            udp.broadcastEndCode()
+
+            if not self.return_button_shown:
+                udp.broadcastEndCode()
+                self.show_return_button()
+                self.return_button_shown = True
 
     def log_event(self, message):
         self.event_log.insert(tk.END, message)
         self.event_log.yview(tk.END)
+
+    def show_return_button(self):
+        back_button = tk.Button(
+            self.root,
+            text="Return to Entry Screen",
+            command=self.return_to_entry,
+            bg="black",
+            fg="lime",
+            font=("Arial", 12, "bold"),
+            bd=2,
+            relief="solid",
+            padx=10,
+            pady=5
+        )
+
+        # Centered near bottom
+        back_button.place(relx=0.5, rely=0.9, anchor="center")
         
     def give_base_icon(self, equipment_id):
         if equipment_id in self.player_map:
@@ -237,7 +316,6 @@ class PlayActionDisplay:
 
                 table.item(item, values=values)
                 name = self.get_player_name(self.last_attacker)
-                self.log_event(f"{name} captured the base (+100)")
                 self.update_team_score(team_name)
 
     def get_player_name(self, equipment_id):
@@ -253,24 +331,29 @@ class PlayActionDisplay:
             if ":" in msg:
                 attacker, target = msg.split(":")
                 attacker = int(attacker)
+                
+                if attacker not in self.player_map:
+                    return
 
                 self.last_attacker = attacker
                 attacker_name = self.get_player_name(attacker)
 
                 if target == "43":
-                    self.log_event(f"{attacker_name} captured the Green Base")
+                    self.log_event(f"{attacker_name} captured the Green Base (+100)")
                     self.assign_base_to_last_attacker("red")
                     return
 
                 if target == "53":
-                    self.log_event(f"{attacker_name} captured the Red Base")
+                    self.log_event(f"{attacker_name} captured the Red Base (+100)")
                     self.assign_base_to_last_attacker("green")
                     return
 
                 target = int(target)
+                
+                if target not in self.player_map:
+                    return
+                    
                 target_name = self.get_player_name(target)
-
-                self.log_event(f"{attacker_name} tagged {target_name}")
 
                 both_red = (attacker in self.red_ids) and (target in self.red_ids)
                 both_green = (attacker in self.green_ids) and (target in self.green_ids)
@@ -279,9 +362,14 @@ class PlayActionDisplay:
                     # Friendly fire
                     udp.broadcastEquipmentID(attacker)
                     udp.broadcastEquipmentID(target)
+                    self.change_player_score(attacker, -10)
+                    self.change_player_score(target, -10)
+                    self.log_event(f"{attacker_name} tagged teammate {target_name} (-10 to both)")
                 else:
                     # Normal hit
                     udp.broadcastEquipmentID(target)
+                    self.change_player_score(attacker, 10)
+                    self.log_event(f"{attacker_name} tagged {target_name} (+10)")
 
         except Exception as e:
             print("Error:", e)
