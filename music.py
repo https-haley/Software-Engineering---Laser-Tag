@@ -28,7 +28,7 @@ class MusicPlayer:
         
         self.current_track = random.choice(available_tracks)
         pygame.mixer.music.load(self.current_track)
-        pygame.mixer.music.play(-1)  # Loop indefinitely
+        pygame.mixer.music.play(0) 
         print(f"Playing: {os.path.basename(self.current_track)}")
 
     def stop_music(self):
