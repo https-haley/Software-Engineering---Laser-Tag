@@ -38,7 +38,7 @@ class Countdown:
             else:
                  delay = 1400   # Slow down last 5 numbers to match audio
 
-self.root.after(delay, self.update_image)
+            self.root.after(delay, self.update_image)
         else:
             if self.on_complete:
                 self.on_complete()  # Call the completion callback if provided
