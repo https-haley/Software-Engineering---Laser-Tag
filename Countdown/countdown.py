@@ -24,7 +24,7 @@ class Countdown:
 
     def update_image(self):
         if self.count >= 0:
-            if self.count == 17 and self.music and not self.music_started:
+            if self.count == 13 and self.music and not self.music_started:
                 self.music.play_random_track()
                 self.music_started = True
             image_path = os.path.join(self.image_dir, f"{self.count}.tif")
